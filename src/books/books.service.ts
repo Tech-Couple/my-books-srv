@@ -1,26 +1,42 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+
+import { Book, BookDocument } from './entities/book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BooksService {
+  constructor(@InjectModel(Book.name) private bookModel: Model<BookDocument>) {}
+
   create(createBookDto: CreateBookDto) {
-    return 'This action adds a new book';
+    const book = new this.bookModel(createBookDto);
+
+    return book.save();
   }
 
   findAll() {
-    return `This action returns all books`;
+    return this.bookModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  findOne(id: string) {
+    return this.bookModel.findById(id);
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+  update(id: string, updateBookDto: UpdateBookDto) {
+    return this.bookModel.findByIdAndUpdate({
+      _id: id,
+    }, {
+      $set: updateBookDto,
+    },{
+      new: true,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  remove(id: string) {
+    return this.bookModel.deleteOne({
+      _id: id
+    }).exec();
   }
 }

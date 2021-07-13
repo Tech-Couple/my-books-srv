@@ -9,7 +9,7 @@ import { BooksModule } from './books/books.module';
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot(`mongodb+srv://app:${process.env.DATABASE_PASSWORD}@my-books.wl3um.mongodb.net/test`),
+    MongooseModule.forRoot(`mongodb+srv://app:${process.env.DATABASE_PASSWORD}@my-books.wl3um.mongodb.net/main`),
     BooksModule,
   ],
   controllers: [],
